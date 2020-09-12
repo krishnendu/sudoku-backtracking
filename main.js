@@ -1,3 +1,14 @@
+if ('serviceWorker' in  navigator)
+{
+    navigator.serviceWorker.register('sw.js').then(registration =>{
+        console.log('SW Registered');
+        console.log(registration);
+    }).catch(e => {
+        console.log('SW Registration Failed !!');
+        console.log(e);
+    })
+}
+
 var boxes=document.querySelectorAll('.box');
 var gs = new Set([1,2,3,4,5,6,7,8,9]);
 var generated_grid,position_changed={}, grid_blank_filled=0,max_pos=0,zero_c=0, p_el=0,blank_pos_count =55;
@@ -285,25 +296,11 @@ function display(){
                 p_el=index;
                 let position_changed_keys = Object.keys(position_changed);
                 if(position_changed_keys.length==blank_pos_count ){
-                    // for( let x=0;x<position_changed_keys.length ;x++){
-                    //     //console.log(position_changed);
-                    //     //console.log([...check(x)],Object.keys(position_changed));
-                    //     let check_index = position_changed[position_changed_keys[x]]
-                    //     console.log(check_index,check(position_changed_keys[x]));
-                    //     if(check(position_changed_keys[x]).has(parseInt(check_index))){
-                    //         console.log('Index check true :',check_index);
-                    //         continue;
-                    //         boxes[x].style.backgroundColor='';
-                    //         console.log(x);
-                            
-                    //     }
-                    //     //else
-                    //     //return;
-                    // }
                     for(let x in position_changed){
                         //console.log(position_changed[x],check(x))
                         if(check(x).has(parseInt(position_changed[x]))){
                             //console.log('Index check true :',x);
+                            boxes[x].style.backgroundColor='';
                             continue;
                         }
                         else

@@ -1,0 +1,24 @@
+{
+    "short_name": "Sudoku",
+    "name": "Sudoku",
+    "description": "By Krishnendu and Suman",
+    "icons": [
+      {
+        "src": "./sudoku.svg",
+        "type": "image/svg",
+        "sizes": "150x150",
+        "purpose": "any"
+      },
+      {
+        "src": "./sudoku.png",
+        "type": "image/png",
+        "sizes": "512x512",
+        "purpose": "maskable any"
+      }
+    ],
+    "start_url": "./",
+    "background_color": "#6dcdb1",
+    "display": "standalone",
+    "theme_color": "#009578"
+    
+  }
