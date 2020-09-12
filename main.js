@@ -1,6 +1,6 @@
 var boxes=document.querySelectorAll('.box');
 var gs = new Set([1,2,3,4,5,6,7,8,9]);
-var generated_grid,position_changed={}, grid_blank_filled=0,max_pos=0,zero_c=0, p_el=0,blank_pos_count =5;
+var generated_grid,position_changed={}, grid_blank_filled=0,max_pos=0,zero_c=0, p_el=0,blank_pos_count =55;
 var obj;
 var grid = new Array();
 
