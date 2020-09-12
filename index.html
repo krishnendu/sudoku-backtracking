@@ -1,12 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>PWA Sudoku</title>
+	<link rel="icon" href="sudoku.svg" sizes="any" type="image/svg+xml">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="global.css">
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-177860187-1"></script>
+
+
 </head>
 <body>
+	<div id='finish-new-game' class="win-win">
+		<div class="win-card">
+			<h2>Congrats!!<br>You win!!</h2>
+			<button  onclick='newGrid()'>New Game</button>
+		</div>
+	</div>
 	<section class="sudoku">
+		<header>
+			<button onclick='newGrid()'>New Game</button>
+			<!--<button>Solve</button>-->
+			<button onclick='resetGrid()'>Reset</button>
+		</header>
+	
 		<table id="table-container">
 			<tr>
 				<td class="box"></td>
@@ -104,6 +121,13 @@
 	</section>
 	
 	<script src="main.js"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-177860187-1');
+	</script>
 </body>
 </html>
 

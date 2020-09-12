@@ -1,7 +1,8 @@
 var boxes=document.querySelectorAll('.box');
 var gs = new Set([1,2,3,4,5,6,7,8,9]);
-var dgrid,positions_changed=0,max_pos=0,zero_c=0;
+var generated_grid,position_changed={}, grid_blank_filled=0,max_pos=0,zero_c=0, p_el=0,blank_pos_count =5;
 var obj;
+var grid = new Array();
 
 
 function oned2twod(n){
@@ -58,9 +59,17 @@ Array.prototype.shuffle = function (y) {
     return this;
 }
 
-var grid = new Array();
-gridGen();
-display();
+
+if(localStorage.saved_grid){
+    generated_grid = JSON.parse(localStorage.saved_grid);
+    if(localStorage.saved_grid_index)
+        position_changed = JSON.parse(localStorage.saved_grid_index);
+    display();
+}
+else{
+    newGrid();
+}
+
 
 function gridGen(){
     for(let i=0 ;i<9;i++)
@@ -75,11 +84,13 @@ function gridGen(){
                 zero_c++;
         }
     }
-    let start, end;
-    start = new Date().getTime();
+    //let start, end;
+    //start = new Date().getTime();
+    
     solve();
-    end = new Date().getTime();
-    console.log(end-start);
+    //end = new Date().getTime();
+    //console.log(end-start);
+    
     console.log(grid);
 }
 
@@ -89,25 +100,16 @@ function solve(){
             if(grid[y][x]==0){
                 let number_set = new Set([1,2,3,4,5,6,7,8,9].shuffle());
                 number_set.forEach((n) => {
-                // while(number_set.size >0)
-                // {
-                //     let n = number_set.push();
-                // }
-                // for (let n=1;n<10;n++){
                     if(possible(y,x,n)){
                         grid[y][x] = n;
-                        positions_changed++;
+                        grid_blank_filled ++;
                         solve();
-                        if(zero_c==positions_changed)
+                        if(zero_c==grid_blank_filled )
                             return;
                         grid[y][x] = 0;
-                        positions_changed--;
+                        grid_blank_filled --;
                     }
                 });
-                // if(max_pos<positions_changed){
-                //     max_pos = positions_changed;
-                //     obj=JSON.parse(JSON.stringify(grid));
-                // }
                 return;
             }
         }
@@ -165,22 +167,8 @@ function _blockCheck(r,c){
 
 //End of Grid generate
 
-// boxes.forEach( (el,index) => {
-
-// 	el.onclick = function(){
-// 		let num = this.innerText;
-// 		this.innerText =(num>0 && num<9) ? this.innerText-(-1) : 1;
-
-// 		console.log(check(el,parseInt(index)));
-
-// 		for(let i=0;i<81;i++){
-// 			let items=boxes[i];
-// 			check(items,i);
-// 		}
-// 	};
-// });
-function check(el,index){
-    let n = parseInt(el.innerText);
+function check(index){
+    let n = parseInt(boxes[index].innerText);
     let rc,cc,bc,uc,dc;
     rc = rowCheck(index);
     cc = columnCheck(index);
@@ -189,9 +177,10 @@ function check(el,index){
     uc= uc.union(bc);
     dc= gs.difference(uc);
     if(uc.has(n))
-        boxes[index].style.backgroundColor = 'red';
-    else
-        boxes[index].style.backgroundColor = '';
+        boxes[index].style.backgroundColor = '#ffbab0';
+    else{
+        boxes[index].style.backgroundColor = '';   
+    }
     return dc;
     
 }
@@ -246,48 +235,106 @@ function blockCheck(index){
     }
     return bc;
 }
-
-
-function display(){
-    dgrid = JSON.parse(JSON.stringify(grid));
-    //console.log(grid,dgrid);
-    let count =40;
+function removeFewNumbers(){
+    generated_grid = JSON.parse(JSON.stringify(grid));
+    let count=blank_pos_count;
     while(count >0){
         let i,j;
         i = (parseInt(Math.random()*100)%9);
         j = (parseInt(Math.random()*100)%9);
         
-        if(dgrid[i][j]!=0)
+        if(generated_grid[i][j]!=0)
         {
-            dgrid[i][j]=0;
+            generated_grid[i][j]=0;
             count--;
         }
     }
-    console.log(dgrid);
+    console.log(generated_grid);
+}
+
+function display(){
+    
     boxes.forEach( (el,index) => {
+        el.style.backgroundColor = '';
         let indexa,i,j;
         indexa=oned2twod(index);
-        //console.log(i,j);
         i=indexa[0];
         j=indexa[1];
-        if(dgrid[i][j]==0){
+        if(generated_grid[i][j]==0){
+            if(index in position_changed){
+                el.innerText=position_changed[index];
+            }
+            else{
+                el.innerText='';
+            }
+            el.classList.value = 'box box-editable';
             el.onclick = function(){
-                let num = this.innerText;
+                if(p_el||p_el==0){
+                    
+                    //console.log(p_el);
+                    boxes[p_el].style.backgroundColor = '';
+                }
+                    
+                
+                let num = parseInt(this.innerText);
                 this.innerText =(num>0 && num<9) ? this.innerText-(-1) : 1;
-                //console.log(check(el,parseInt(index)));
-                for(let i=0;i<81;i++){
-                    let items=boxes[i];
-                    check(items,i);
+                position_changed[index]=this.innerText;
+                check(index);
+                localStorage.saved_grid = JSON.stringify(generated_grid);
+                localStorage.saved_grid_index = JSON.stringify(position_changed);
+                p_el=index;
+                let position_changed_keys = Object.keys(position_changed);
+                if(position_changed_keys.length==blank_pos_count ){
+                    // for( let x=0;x<position_changed_keys.length ;x++){
+                    //     //console.log(position_changed);
+                    //     //console.log([...check(x)],Object.keys(position_changed));
+                    //     let check_index = position_changed[position_changed_keys[x]]
+                    //     console.log(check_index,check(position_changed_keys[x]));
+                    //     if(check(position_changed_keys[x]).has(parseInt(check_index))){
+                    //         console.log('Index check true :',check_index);
+                    //         continue;
+                    //         boxes[x].style.backgroundColor='';
+                    //         console.log(x);
+                            
+                    //     }
+                    //     //else
+                    //     //return;
+                    // }
+                    for(let x in position_changed){
+                        //console.log(position_changed[x],check(x))
+                        if(check(x).has(parseInt(position_changed[x]))){
+                            //console.log('Index check true :',x);
+                            continue;
+                        }
+                        else
+                        return;
+                    }
+                    document.querySelector('.win-win').style.display='block';
                 }
             };
         }
         else{
-            el.innerText=dgrid[i][j];
+            el.innerText=generated_grid[i][j];
+            el.classList.value = 'box box-nonEditable';
+            el.onclick=undefined;
         }
-
-        
-
-        
     });
+}
 
+function newGrid(){
+    position_changed={};
+    document.getElementById('finish-new-game').style.display='none';
+    gridGen();
+    removeFewNumbers();
+    display();
+    localStorage.saved_grid = JSON.stringify(generated_grid);
+    localStorage.removeItem('saved_grid_index');
+    p_el=null;
+}
+
+function resetGrid(){
+    position_changed={};
+    display();
+    localStorage.removeItem('saved_grid_index');
+    p_el=null;
 }
