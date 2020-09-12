@@ -261,6 +261,7 @@ function removeFewNumbers(){
         }
     }
     console.log(generated_grid);
+    localStorage.saved_grid = JSON.stringify(generated_grid);
 }
 
 function display(){
@@ -291,7 +292,7 @@ function display(){
                 this.innerText =(num>0 && num<9) ? this.innerText-(-1) : 1;
                 position_changed[index]=this.innerText;
                 check(index);
-                localStorage.saved_grid = JSON.stringify(generated_grid);
+                //localStorage.saved_grid = JSON.stringify(generated_grid);
                 localStorage.saved_grid_index = JSON.stringify(position_changed);
                 p_el=index;
                 let position_changed_keys = Object.keys(position_changed);
@@ -309,11 +310,19 @@ function display(){
                     document.querySelector('.win-win').style.display='block';
                 }
             };
+            el.oncontextmenu = function(){
+                this.innerText='';
+                this.style.backgroundColor = '';
+                delete position_changed[index];
+                localStorage.saved_grid_index = JSON.stringify(position_changed);
+
+            }
         }
         else{
             el.innerText=generated_grid[i][j];
             el.classList.value = 'box box-nonEditable';
             el.onclick=undefined;
+            el.oncontextmenu=undefined;
         }
     });
 }
