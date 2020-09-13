@@ -12,23 +12,34 @@
 	<link rel="stylesheet" type="text/css" href="global.css">
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-177860187-1"></script>
-
-
 </head>
 <body>
-	<div id='finish-new-game' class="win-win">
+	<div id="finish-new-game" class="win-win">
 		<div class="win-card">
 			<h2>Congrats!!<br>You win!!</h2>
-			<button  onclick='newGrid()'>New Game</button>
+			<div class="newgame">
+				<button onclick='let level=document.querySelector("#con1");let leveld=level.style.display;level.style.display=(leveld=="block")?"none":"block"'>New Game</button>
+				<div class="level-container" id="con1">
+					<div class="game-level">Easy</div>
+					<div class="game-level">Medium</div>
+					<div class="game-level">Hard</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<section class="sudoku">
-		<header>
-			<button onclick='newGrid()'>New Game</button>
-			<!--<button>Solve</button>-->
+		<header class="table-header">
+			<div class="newgame">
+				<button onclick='let level=document.querySelector("#con2");let leveld=level.style.display;level.style.display=(leveld=="block")?"none":"block"'>New Game</button>
+				<div class="level-container" id="con2">
+					<div class="game-level">Easy</div>
+					<div class="game-level">Medium</div>
+					<div class="game-level">Hard</div>
+				</div>
+			</div>
+			<button  onclick='checkAll(this)'>Check</button>
 			<button onclick='resetGrid()'>Reset</button>
 		</header>
-	
 		<table id="table-container">
 			<tr>
 				<td class="box"></td>
@@ -123,7 +134,20 @@
 				<td class="box"></td>
 			</tr>
 		</table>
+		<section id="numpad">
+			<div class="numkey">1</div>
+			<div class="numkey">2</div>
+			<div class="numkey">3</div>
+			<div class="numkey">4</div>
+			<div class="numkey">5</div>
+			<div class="numkey">6</div>
+			<div class="numkey">7</div>
+			<div class="numkey">8</div>
+			<div class="numkey">9</div>
+			<div class="numkey">c</div>
+		</section>
 	</section>
+	
 	
 	<script src="main.js"></script>
 	<script>

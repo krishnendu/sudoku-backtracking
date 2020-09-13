@@ -10,6 +10,7 @@ if ('serviceWorker' in  navigator)
 }
 
 var boxes=document.querySelectorAll('.box');
+var numpad=document.querySelectorAll('.numkey');
 var gs = new Set([1,2,3,4,5,6,7,8,9]);
 var generated_grid,position_changed={}, grid_blank_filled=0,max_pos=0,zero_c=0, p_el=0,blank_pos_count =55;
 var obj;
@@ -190,7 +191,7 @@ function check(index){
     if(uc.has(n))
         boxes[index].style.backgroundColor = '#ffbab0';
     else{
-        boxes[index].style.backgroundColor = '';   
+        boxes[index].style.backgroundColor = 'yellow';   
     }
     return dc;
     
@@ -282,39 +283,40 @@ function display(){
             el.classList.value = 'box box-editable';
             el.onclick = function(){
                 if(p_el||p_el==0){
-                    
-                    //console.log(p_el);
-                    boxes[p_el].style.backgroundColor = '';
-                }
-                    
+					boxes[p_el].style.backgroundColor = '';
+					boxes[p_el].id='';
+				}
+				el.id='selected';
+				el.style.backgroundColor='yellow';
+                p_el=index;    
                 
-                let num = parseInt(this.innerText);
-                this.innerText =(num>0 && num<9) ? this.innerText-(-1) : 1;
-                position_changed[index]=this.innerText;
-                check(index);
-                //localStorage.saved_grid = JSON.stringify(generated_grid);
-                localStorage.saved_grid_index = JSON.stringify(position_changed);
-                p_el=index;
-                let position_changed_keys = Object.keys(position_changed);
-                if(position_changed_keys.length==blank_pos_count ){
-                    for(let x in position_changed){
-                        //console.log(position_changed[x],check(x))
-                        if(check(x).has(parseInt(position_changed[x]))){
-                            //console.log('Index check true :',x);
-                            boxes[x].style.backgroundColor='';
-                            continue;
-                        }
-                        else
-                        return;
-                    }
-                    document.querySelector('.win-win').style.display='block';
-                }
-            };
-            el.oncontextmenu = function(){
-                this.innerText='';
-                this.style.backgroundColor = '';
-                delete position_changed[index];
-                localStorage.saved_grid_index = JSON.stringify(position_changed);
+                // let num = parseInt(this.innerText);
+                // this.innerText =(num>0 && num<9) ? this.innerText-(-1) : 1;
+                // position_changed[index]=this.innerText;
+                // check(index);
+                // //localStorage.saved_grid = JSON.stringify(generated_grid);
+                // localStorage.saved_grid_index = JSON.stringify(position_changed);
+                // p_el=index;
+                // let position_changed_keys = Object.keys(position_changed);
+                // if(position_changed_keys.length==blank_pos_count ){
+                //     for(let x in position_changed){
+                //         //console.log(position_changed[x],check(x))
+                //         if(check(x).has(parseInt(position_changed[x]))){
+                //             //console.log('Index check true :',x);
+                //             boxes[x].style.backgroundColor='';
+                //             continue;
+                //         }
+                //         else
+                //         return;
+                //     }
+                //     document.querySelector('.win-win').style.display='block';
+                // }
+            // };
+            // el.oncontextmenu = function(){
+            //     this.innerText='';
+            //     this.style.backgroundColor = '';
+            //     delete position_changed[index];
+            //     localStorage.saved_grid_index = JSON.stringify(position_changed);
 
             }
         }
@@ -335,7 +337,11 @@ function newGrid(){
     display();
     localStorage.saved_grid = JSON.stringify(generated_grid);
     localStorage.removeItem('saved_grid_index');
-    p_el=null;
+	p_el=null;
+	let gamelevelbar=document.querySelectorAll('.level-container');
+	gamelevelbar.forEach((el)=>{
+		el.style.display='none';
+	});
 }
 
 function resetGrid(){
@@ -343,4 +349,75 @@ function resetGrid(){
     display();
     localStorage.removeItem('saved_grid_index');
     p_el=null;
+}
+
+
+numpad.forEach((el,index) =>{
+	el.onclick=function(){
+		let selected= boxes[p_el];
+		console.log(p_el);
+		if(el.innerText=='c'){
+			selected.innerText='';
+			selected.style.backgroundColor = 'yellow';
+			delete position_changed[p_el];
+			localStorage.saved_grid_index = JSON.stringify(position_changed);
+			return;
+		}
+		let num = parseInt(el.innerText);
+		selected.innerText=num;
+
+		position_changed[p_el]=num;
+		check(p_el);
+		localStorage.saved_grid_index = JSON.stringify(position_changed);
+		if(Object.keys(position_changed).length==blank_pos_count ){
+			for(let x in position_changed){
+				if(check(x).has(parseInt(position_changed[x]))){
+					boxes[x].style.backgroundColor='';
+					continue;
+				}
+				else
+				return;
+			}
+			document.querySelector('.win-win').style.display='block';
+		}
+
+	}
+});
+
+function gameLevel(){
+	let gamelevel=document.querySelectorAll('.game-level');
+	gamelevel.forEach((el,index) =>{
+		el.onclick=function(){
+			if(el.innerText=='Hard')
+				blank_pos_count=65;
+			else if(el.innerText=='Medium')
+				blank_pos_count=50;
+			else
+				blank_pos_count=35;
+			newGrid();
+		}
+	});
+}
+gameLevel();
+
+function checkAll(e){
+	if(e.innerText=='Check'){
+		e.innerText='Uncheck';
+		for(let x in position_changed){
+			check(x);
+		}
+	}
+	else{
+		e.innerText='Check';
+		for(let x in position_changed){
+			boxes[x].style.backgroundColor='';
+		}
+	}
+}
+
+function unCheckAll()
+{
+	for(let x in position_changed){
+		boxes[x].style.backgroundColor='';
+	}
 }
