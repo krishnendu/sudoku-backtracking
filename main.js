@@ -354,6 +354,9 @@ function resetGrid(){
 
 numpad.forEach((el,index) =>{
 	el.onclick=function(){
+        if(p_el==null){
+            return;
+        }
 		let selected= boxes[p_el];
 		console.log(p_el);
 		if(el.innerText=='C'){
@@ -380,8 +383,7 @@ numpad.forEach((el,index) =>{
 			}
 			document.querySelector('.win-win').style.display='block';
 		}
-
-	}
+    }
 });
 
 function gameLevel(){
