@@ -12,7 +12,7 @@ if ('serviceWorker' in  navigator)
 var boxes=document.querySelectorAll('.box');
 var numpad=document.querySelectorAll('.numkey');
 var gs = new Set([1,2,3,4,5,6,7,8,9]);
-var generated_grid,position_changed={}, grid_blank_filled=0,max_pos=0,zero_c=0, p_el=0,blank_pos_count =55;
+var generated_grid,position_changed={}, grid_blank_filled=0,max_pos=0,zero_c=0, p_el=null, blank_pos_count =55;
 var obj;
 var grid = new Array();
 
@@ -119,7 +119,7 @@ function solve(){
                         if(zero_c==grid_blank_filled )
                             return;
                         grid[y][x] = 0;
-                        grid_blank_filled --;
+                        grid_blank_filled--;
                     }
                 });
                 return;
@@ -191,7 +191,7 @@ function check(index){
     if(uc.has(n))
         boxes[index].style.backgroundColor = '#ffbab0';
     else{
-        boxes[index].style.backgroundColor = 'yellow';   
+        boxes[index].style.backgroundColor = 'transparent';   
     }
     return dc;
     
@@ -282,12 +282,12 @@ function display(){
             }
             el.classList.value = 'box box-editable';
             el.onclick = function(){
-                if(p_el||p_el==0){
+                if(p_el||(p_el==0)){
 					boxes[p_el].style.backgroundColor = '';
 					boxes[p_el].id='';
 				}
 				el.id='selected';
-				el.style.backgroundColor='yellow';
+				el.style.backgroundColor='#bff';
                 p_el=index;    
                 
                 // let num = parseInt(this.innerText);
@@ -356,9 +356,9 @@ numpad.forEach((el,index) =>{
 	el.onclick=function(){
 		let selected= boxes[p_el];
 		console.log(p_el);
-		if(el.innerText=='c'){
+		if(el.innerText=='C'){
 			selected.innerText='';
-			selected.style.backgroundColor = 'yellow';
+			selected.style.backgroundColor = '';
 			delete position_changed[p_el];
 			localStorage.saved_grid_index = JSON.stringify(position_changed);
 			return;
@@ -389,11 +389,11 @@ function gameLevel(){
 	gamelevel.forEach((el,index) =>{
 		el.onclick=function(){
 			if(el.innerText=='Hard')
-				blank_pos_count=65;
+				blank_pos_count=60;
 			else if(el.innerText=='Medium')
 				blank_pos_count=50;
 			else
-				blank_pos_count=35;
+				blank_pos_count=40;
 			newGrid();
 		}
 	});
