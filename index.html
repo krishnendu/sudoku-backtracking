@@ -4,11 +4,11 @@
 	<title>PWA Sudoku</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="theme-color" content="#009578" >
+	<meta name="theme-color" content="#2060cc" >
 	<link rel="manifest" href="manifest.json">
 	<link rel="apple-touch-icon" href='sudoku.svg'>
 	<link rel="icon" href="sudoku.svg" sizes="any" type="image/svg+xml">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content= "width=device-width, user-scalable=0, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="global.css">
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-177860187-1"></script>
@@ -18,7 +18,7 @@
 		<div class="win-card">
 			<h2>Congrats!!<br>You win!!</h2>
 			<div class="newgame">
-				<button onclick='let level=document.querySelector("#con1");let leveld=level.style.display;level.style.display=(leveld=="block")?"none":"block"'>New Game</button>
+				<button class="btn" onclick='let level=document.querySelector("#con1");let leveld=level.style.display;level.style.display=(leveld=="block")?"none":"block"'>New Game</button>
 				<div class="level-container" id="con1">
 					<div class="game-level">Easy</div>
 					<div class="game-level">Medium</div>
@@ -30,15 +30,15 @@
 	<section class="sudoku">
 		<header class="table-header">
 			<div class="newgame">
-				<button onclick='let level=document.querySelector("#con2");let leveld=level.style.display;level.style.display=(leveld=="block")?"none":"block"'>New Game</button>
+				<button class="btn" onclick='let level=document.querySelector("#con2");let leveld=level.style.display;level.style.display=(leveld=="block")?"none":"block"'>New Game</button>
 				<div class="level-container" id="con2">
 					<div class="game-level">Easy</div>
 					<div class="game-level">Medium</div>
 					<div class="game-level">Hard</div>
 				</div>
 			</div>
-			<button  onclick='checkAll(this)'>Check</button>
-			<button onclick='resetGrid()'>Reset</button>
+			<button class="btn" onclick='checkAll(this)'>Check</button>
+			<button class="btn" onclick='resetGrid()'>Reset</button>
 		</header>
 		<table id="table-container">
 			<tr>
@@ -135,16 +135,16 @@
 			</tr>
 		</table>
 		<section id="numpad">
-			<div class="numkey">1</div>
-			<div class="numkey">2</div>
-			<div class="numkey">3</div>
-			<div class="numkey">4</div>
-			<div class="numkey">5</div>
-			<div class="numkey">6</div>
-			<div class="numkey">7</div>
-			<div class="numkey">8</div>
-			<div class="numkey">9</div>
-			<div class="numkey">c</div>
+			<button class="numkey">1</button>
+			<button class="numkey">2</button>
+			<button class="numkey">3</button>
+			<button class="numkey">4</button>
+			<button class="numkey">5</button>
+			<button class="numkey">6</button>
+			<button class="numkey">7</button>
+			<button class="numkey">8</button>
+			<button class="numkey">9</button>
+			<button class="numkey">C</button>
 		</section>
 	</section>
 	
